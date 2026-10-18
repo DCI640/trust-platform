@@ -477,5 +477,46 @@ window.supabaseClient = supabase;
   testSupabaseConnection();
 </script>
 
+
+<section id="admin-panel" class="soft">
+  <div class="section-title">
+    <h2>Administrator access</h2>
+    <p>Sign in with your authorized administrator account to manage seller verification records.</p>
+  </div>
+
+  <div class="form-wrap">
+    <form id="admin-login-form">
+      <label for="admin-email">Administrator email</label>
+      <input
+        id="admin-email"
+        type="email"
+        autocomplete="username"
+        required
+      >
+
+      <label for="admin-password">Password</label>
+      <input
+        id="admin-password"
+        type="password"
+        autocomplete="current-password"
+        required
+      >
+
+      <button class="button" type="submit">Sign in</button>
+    </form>
+
+    <p id="admin-message" role="status"></p>
+
+    <div id="admin-dashboard" hidden>
+      <h3>Seller management</h3>
+      <p id="admin-account-message"></p>
+      <p>Administrator access confirmed. Seller management controls will be added next.</p>
+      <button id="admin-logout" class="button" type="button">
+        Sign out
+      </button>
+    </div>
+  </div>
+</section>
+
 </body>
 </html>
