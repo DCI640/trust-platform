@@ -566,7 +566,39 @@ if (adminError || isAdmin !== true) {
     <div id="admin-dashboard" hidden>
       <h3>Seller management</h3>
       <p id="admin-account-message"></p>
-      <p>Administrator access confirmed. Seller management controls will be added next.</p>
+      
+<p>Administrator access confirmed. Use the form below to register and review sellers.</p>
+
+<form id="add-seller-form">
+  <label for="seller-name">Business name</label>
+  <input id="seller-name" type="text" required>
+
+  <label for="seller-website">Official website URL</label>
+  <input id="seller-website" type="url" placeholder="https://example.com">
+
+  <label for="seller-social">Official social media URL</label>
+  <input id="seller-social" type="url" placeholder="https://...">
+
+  <label for="seller-contact">Public business contact</label>
+  <input id="seller-contact" type="text" placeholder="Business email or phone">
+
+  <label for="seller-evidence">Verification evidence and notes</label>
+  <textarea id="seller-evidence" rows="4" required></textarea>
+
+  <label for="seller-status">Initial status</label>
+  <select id="seller-status" required>
+    <option value="pending">Pending review</option>
+    <option value="under_review">Under review</option>
+    <option value="verified">Verified</option>
+    <option value="unable_to_verify">Unable to verify</option>
+    <option value="suspended">Suspended</option>
+  </select>
+
+  <button class="button" type="submit">Save seller</button>
+</form>
+
+<p id="add-seller-message" role="status"></p>
+
       <button id="admin-logout" class="button" type="button">
         Sign out
       </button>
