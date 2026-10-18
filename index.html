@@ -652,7 +652,17 @@ if (adminError || isAdmin !== true) {
   <button class="button" type="submit">Save seller</button>
 </form>
 
-<p id="add-seller-message" role="status"></p>
+<p id="add-seller-message" role="status"></p><hr>
+<h3>Review existing sellers</h3>
+<p>View seller records and update their verification status.</p>
+
+<button class="button" id="load-sellers-button" type="button">
+  Load seller records
+</button>
+
+<p id="seller-list-message" role="status"></p>
+
+<div id="seller-list"></div>
 
       <button id="admin-logout" class="button" type="button">
         Sign out
