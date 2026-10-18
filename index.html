@@ -322,12 +322,56 @@
     `${seller.business_name} — DEMO RECORD ONLY. Website: ${seller.website_url || "Not provided"}. ${seller.evidence_summary || ""}`
   ).join("\n\n");
 });
+document.getElementById("service-form").addEventListener("submit", async function(event) {
+  event.preventDefault();
 
-    document.getElementById("service-form").addEventListener("submit", function(event) {
-      event.preventDefault();
-      document.getElementById("service-message").textContent =
-        "Your form looks complete, but it has not been sent or saved. Online submission will be connected in a later step.";
+  const message = document.getElementById("service-message");
+  const supabase = window.supabaseClient;
+
+  const customerName = document.getElementById("customer-name").value.trim();
+  const customerContact = document.getElementById("customer-contact").value.trim();
+  const selectedService = document.getElementById("service-type").value;
+  const details = document.getElementById("service-details").value.trim();
+
+  if (!customerName || !customerContact || !selectedService || !details) {
+    message.textContent = "Please complete all required fields.";
+    return;
+  }
+
+  if (!supabase) {
+    message.textContent = "Database is still connecting. Please try again.";
+    return;
+  }
+
+  const serviceTypes = {
+    "Seller verification": "seller_verification",
+    "Product inspection": "product_inspection",
+    "Purchase assistance": "purchase_assistance",
+    "Shipping coordination": "shipping_coordination"
+  };
+
+  message.textContent = "Submitting your request...";
+
+  const { error } = await supabase
+    .from("service_requests")
+    .insert({
+      customer_name: customerName,
+      customer_contact: customerContact,
+      service_type: serviceTypes[selectedService],
+      request_details: details
     });
+
+  if (error) {
+    console.error("Service request submission error:", error.message);
+    message.textContent = "Your request could not be saved. Please try again later.";
+    return;
+  }
+
+  message.textContent =
+    "Your test request was saved successfully. We have not yet confirmed or arranged any service.";
+
+  document.getElementById("service-form").reset();
+});
 
     document.getElementById("report-button").addEventListener("click", async function() {
   const link = document.getElementById("report-link").value.trim();
