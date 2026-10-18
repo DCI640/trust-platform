@@ -633,6 +633,10 @@ document.getElementById('add-seller-form').addEventListener('submit', async func
   const social = document.getElementById('seller-social').value.trim();
   const contact = document.getElementById('seller-contact').value.trim();
   const evidence = document.getElementById('seller-evidence').value.trim();
+  const method = document.getElementById('seller-method').value;
+const evidenceUrl = document.getElementById('seller-evidence-url').value.trim();
+const reviewer = document.getElementById('seller-reviewer').value.trim();
+const reviewNotes = document.getElementById('seller-review-notes').value.trim();
   const status = document.getElementById('seller-status').value;
 
   if (!businessName || !evidence) {
