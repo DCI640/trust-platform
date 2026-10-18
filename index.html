@@ -304,5 +304,41 @@
       message.textContent = "Report preview prepared. Nothing has been submitted or published.";
     });
   </script>
+
+<script type="module">
+  import { createClient } from
+    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+  const SUPABASE_URL = 'https://gpvkxkhtpkvxvqyalmwp.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_tO3kUY5K_QA52NwWRBkZIw_hfQpaNak';
+
+  const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+  async function testSupabaseConnection() {
+    const message = document.getElementById('search-message');
+
+    const { error } = await supabase
+      .from('sellers')
+      .select('id')
+      .eq('verification_status', 'verified')
+      .limit(1);
+
+    if (error) {
+      message.textContent =
+        'Database connection needs attention. Please try again later.';
+      console.error('Supabase connection error:', error.message);
+      return;
+    }
+
+    message.textContent =
+      'Database connected successfully.';
+  }
+
+  testSupabaseConnection();
+</script>
+
 </body>
 </html>
