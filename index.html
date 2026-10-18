@@ -475,6 +475,64 @@ window.supabaseClient = supabase;
   }
 
   testSupabaseConnection();
+
+  document.getElementById('admin-login-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const message = document.getElementById('admin-message');
+    const dashboard = document.getElementById('admin-dashboard');
+    const accountMessage = document.getElementById('admin-account-message');
+
+    const email = document.getElementById('admin-email').value.trim();
+    const password = document.getElementById('admin-password').value;
+
+    message.textContent = 'Signing in...';
+    dashboard.hidden = true;
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+    if (error) {
+      message.textContent = 'Sign-in failed. Check your email and password.';
+      console.error('Admin sign-in error:', error.message);
+      return;
+    }
+
+    const { data: adminRecord, error: adminError } = await supabase
+      .from('admin_users')
+      .select('role')
+      .eq('user_id', data.user.id)
+      .eq('role', 'admin')
+      .maybeSingle();
+
+    if (adminError || !adminRecord) {
+      await supabase.auth.signOut();
+      message.textContent = 'This account is not authorized to access the admin area.';
+      return;
+    }
+
+    message.textContent = 'Administrator sign-in successful.';
+    accountMessage.textContent = 'Signed in as ' + data.user.email;
+    dashboard.hidden = false;
+    document.getElementById('admin-login-form').hidden = true;
+  });
+
+  document.getElementById('admin-logout').addEventListener('click', async function() {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      document.getElementById('admin-message').textContent =
+        'Sign-out failed. Please try again.';
+      return;
+    }
+
+    document.getElementById('admin-login-form').hidden = false;
+    document.getElementById('admin-dashboard').hidden = true;
+    document.getElementById('admin-message').textContent = 'You have signed out.';
+    document.getElementById('admin-password').value = '';
+  });
 </script>
 
 
