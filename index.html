@@ -305,11 +305,11 @@ document.getElementById("seller-search").addEventListener("submit", async functi
   message.textContent = "Searching seller records...";
 
   const { data, error } = await supabase
-    .from("sellers")
-    .select("business_name, website_url, verification_status, evidence_summary")
-    .eq("verification_status", "verified")
-    .or(`business_name.ilike.%${query}%,website_url.ilike.%${query}%`)
-    .limit(10);
+  .from("sellers")
+  .select("business_name, website_url, social_media_url, public_contact, verification_status, evidence_summary")
+  .eq("verification_status", "verified")
+  .or(`business_name.ilike.%${query}%,website_url.ilike.%${query}%,social_media_url.ilike.%${query}%,public_contact.ilike.%${query}%`)
+  .limit(10);
 
   if (error) {
     console.error("Seller search error:", error.message);
