@@ -475,6 +475,61 @@ window.supabaseClient = supabase;
   }
 
   testSupabaseConnection();
+  
+document.getElementById('add-seller-form').addEventListener('submit', async function(event) {
+  event.preventDefault();
+
+  const message = document.getElementById('add-seller-message');
+
+  const { data: sessionData } = await supabase.auth.getSession();
+  if (!sessionData.session) {
+    message.textContent = 'Please sign in as an administrator first.';
+    return;
+  }
+
+  const { data: isAdmin, error: adminError } =
+    await supabase.rpc('is_admin');
+
+  if (adminError || isAdmin !== true) {
+    message.textContent = 'Administrator authorization failed.';
+    return;
+  }
+
+  const businessName = document.getElementById('seller-name').value.trim();
+  const website = document.getElementById('seller-website').value.trim();
+  const social = document.getElementById('seller-social').value.trim();
+  const contact = document.getElementById('seller-contact').value.trim();
+  const evidence = document.getElementById('seller-evidence').value.trim();
+  const status = document.getElementById('seller-status').value;
+
+  if (!businessName || !evidence) {
+    message.textContent = 'Enter the business name and verification notes.';
+    return;
+  }
+
+  message.textContent = 'Saving seller record...';
+
+  const { error } = await supabase
+    .from('sellers')
+    .insert({
+      business_name: businessName,
+      website_url: website || null,
+      social_media_url: social || null,
+      public_contact: contact || null,
+      evidence_summary: evidence,
+      verification_status: status,
+      last_reviewed_at: status === 'verified' ? new Date().toISOString() : null
+    });
+
+  if (error) {
+    console.error('Save seller error:', error.message);
+    message.textContent = 'Seller could not be saved. Check permissions and try again.';
+    return;
+  }
+
+  message.textContent = 'Seller record saved successfully.';
+  document.getElementById('add-seller-form').reset();
+});
 
   document.getElementById('admin-login-form').addEventListener('submit', async function(event) {
     event.preventDefault();
