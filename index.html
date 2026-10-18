@@ -475,7 +475,140 @@ window.supabaseClient = supabase;
   }
 
   testSupabaseConnection();
-  
+  document.getElementById('load-sellers-button').addEventListener('click', async function() {
+  const message = document.getElementById('seller-list-message');
+  const list = document.getElementById('seller-list');
+
+  const { data: sessionData } = await supabase.auth.getSession();
+
+  if (!sessionData.session) {
+    message.textContent = 'Please sign in as an administrator first.';
+    return;
+  }
+
+  const { data: isAdmin, error: adminError } =
+    await supabase.rpc('is_admin');
+
+  if (adminError || isAdmin !== true) {
+    message.textContent = 'Administrator authorization failed.';
+    return;
+  }
+
+  message.textContent = 'Loading seller records...';
+  list.replaceChildren();
+
+  const { data, error } = await supabase
+    .from('sellers')
+    .select('id, business_name, website_url, social_media_url, public_contact, verification_status, evidence_summary, last_reviewed_at, created_at')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Load sellers error:', error.message);
+    message.textContent = 'Could not load seller records. Please try again.';
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    message.textContent = 'No seller records found.';
+    return;
+  }
+
+  data.forEach(function(seller) {
+    const card = document.createElement('div');
+    card.className = 'form-wrap';
+
+    const name = document.createElement('h4');
+    name.textContent = seller.business_name;
+    card.appendChild(name);
+
+    const status = document.createElement('p');
+    status.textContent = 'Status: ' + seller.verification_status;
+    card.appendChild(status);
+
+    const evidence = document.createElement('p');
+    evidence.textContent = 'Evidence: ' + (seller.evidence_summary || 'No notes recorded');
+    card.appendChild(evidence);
+
+    const website = document.createElement('p');
+    website.textContent = 'Website: ' + (seller.website_url || 'Not provided');
+    card.appendChild(website);
+
+    const select = document.createElement('select');
+    select.setAttribute('aria-label', 'Verification status for ' + seller.business_name);
+
+    [
+      ['pending', 'Pending review'],
+      ['under_review', 'Under review'],
+      ['verified', 'Verified'],
+      ['unable_to_verify', 'Unable to verify'],
+      ['suspended', 'Suspended']
+    ].forEach(function(optionData) {
+      const option = document.createElement('option');
+      option.value = optionData[0];
+      option.textContent = optionData[1];
+      select.appendChild(option);
+    });
+
+    select.value = seller.verification_status;
+    card.appendChild(select);
+
+    const saveButton = document.createElement('button');
+    saveButton.type = 'button';
+    saveButton.className = 'button';
+    saveButton.textContent = 'Update status';
+
+    saveButton.addEventListener('click', async function() {
+      const { data: currentSession } = await supabase.auth.getSession();
+
+      if (!currentSession.session) {
+        message.textContent = 'Please sign in again.';
+        return;
+      }
+
+      const { data: stillAdmin, error: checkError } =
+        await supabase.rpc('is_admin');
+
+      if (checkError || stillAdmin !== true) {
+        message.textContent = 'Administrator authorization failed.';
+        return;
+      }
+
+      const newStatus = select.value;
+      const updateData = {
+        verification_status: newStatus,
+        last_reviewed_at: newStatus === 'verified'
+          ? new Date().toISOString()
+          : seller.last_reviewed_at
+      };
+
+      saveButton.disabled = true;
+      message.textContent = 'Updating ' + seller.business_name + '...';
+
+      const { error: updateError } = await supabase
+        .from('sellers')
+        .update(updateData)
+        .eq('id', seller.id);
+
+      saveButton.disabled = false;
+
+      if (updateError) {
+        console.error('Update seller status error:', updateError.message);
+        message.textContent = 'Status update failed. Please try again.';
+        return;
+      }
+
+      seller.verification_status = newStatus;
+      seller.last_reviewed_at = updateData.last_reviewed_at;
+      status.textContent = 'Status: ' + newStatus;
+      message.textContent = 'Seller status updated successfully.';
+    });
+
+    card.appendChild(saveButton);
+    list.appendChild(card);
+  });
+
+  message.textContent = 'Loaded ' + data.length + ' seller record(s).';
+});
 document.getElementById('add-seller-form').addEventListener('submit', async function(event) {
   event.preventDefault();
 
