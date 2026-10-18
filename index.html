@@ -280,12 +280,48 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    document.getElementById("seller-search").addEventListener("submit", function(event) {
-      event.preventDefault();
-      const query = document.getElementById("seller-query").value.trim();
-      document.getElementById("search-message").textContent =
-        'Search for "' + query + '" is a preview only. The seller database has not been connected yet.';
-    });
+    document.getElementById("seller-search").addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const query = document.getElementById("seller-query").value.trim();
+  const message = document.getElementById("search-message");
+  const supabase = window.supabaseClient;
+
+  if (!query) {
+    message.textContent = "Enter a seller name or website to search.";
+    return;
+  }
+
+  if (!supabase) {
+    message.textContent = "Database is still connecting. Please try again.";
+    return;
+  }
+
+  message.textContent = "Searching seller records...";
+
+  const { data, error } = await supabase
+    .from("sellers")
+    .select("business_name, website_url, verification_status, evidence_summary")
+    .ilike("business_name", `%${query}%`)
+    .eq("verification_status", "verified")
+    .limit(10);
+
+  if (error) {
+    console.error("Seller search error:", error.message);
+    message.textContent = "Search is temporarily unavailable. Please try again later.";
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    message.textContent =
+      "No verified sellers matched your search. This does not necessarily mean the seller is fraudulent.";
+    return;
+  }
+
+  message.textContent = data.map(seller =>
+    `${seller.business_name} — DEMO RECORD ONLY. Website: ${seller.website_url || "Not provided"}. ${seller.evidence_summary || ""}`
+  ).join("\n\n");
+});
 
     document.getElementById("service-form").addEventListener("submit", function(event) {
       event.preventDefault();
@@ -316,7 +352,7 @@
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
   );
-
+window.supabaseClient = supabase;
   async function testSupabaseConnection() {
     const message = document.getElementById('search-message');
 
