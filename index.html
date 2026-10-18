@@ -500,18 +500,16 @@ window.supabaseClient = supabase;
       return;
     }
 
-    const { data: adminRecord, error: adminError } = await supabase
-      .from('admin_users')
-      .select('role')
-      .eq('user_id', data.user.id)
-      .eq('role', 'admin')
-      .maybeSingle();
+    
+const { data: isAdmin, error: adminError } =
+  await supabase.rpc('is_admin');
 
-    if (adminError || !adminRecord) {
-      await supabase.auth.signOut();
-      message.textContent = 'This account is not authorized to access the admin area.';
-      return;
-    }
+if (adminError || isAdmin !== true) {
+  await supabase.auth.signOut();
+  message.textContent =
+    'This account is not authorized to access the admin area.';
+  return;
+}
 
     message.textContent = 'Administrator sign-in successful.';
     accountMessage.textContent = 'Signed in as ' + data.user.email;
