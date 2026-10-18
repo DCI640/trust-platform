@@ -772,7 +772,25 @@ if (adminError || isAdmin !== true) {
 
   <label for="seller-evidence">Verification evidence and notes</label>
   <textarea id="seller-evidence" rows="4" required></textarea>
+<label for="seller-method">Verification method</label>
+<select id="seller-method" required>
+  <option value="">Choose a method</option>
+  <option value="official_website">Official website checks</option>
+  <option value="official_contact">Official business contact confirmation</option>
+  <option value="in_person">In-person inspection</option>
+  <option value="documents">Business documents reviewed</option>
+  <option value="other">Other method</option>
+</select>
 
+<label for="seller-evidence-url">Evidence URL (optional)</label>
+<input id="seller-evidence-url" type="url" placeholder="https://...">
+
+<label for="seller-reviewer">Reviewer</label>
+<input id="seller-reviewer" type="text" placeholder="Reviewer name" required>
+
+<label for="seller-review-notes">Review findings</label>
+<textarea id="seller-review-notes" rows="3" required></textarea>
+  
   <label for="seller-status">Initial status</label>
   <select id="seller-status" required>
     <option value="pending">Pending review</option>
