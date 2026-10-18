@@ -654,6 +654,10 @@ const reviewNotes = document.getElementById('seller-review-notes').value.trim();
       social_media_url: social || null,
       public_contact: contact || null,
       evidence_summary: evidence,
+      reviewed_by: reviewer,
+verification_method: method,
+evidence_url: evidenceUrl || null,
+review_notes: reviewNotes,
       verification_status: status,
       last_reviewed_at: status === 'verified' ? new Date().toISOString() : null
     });
