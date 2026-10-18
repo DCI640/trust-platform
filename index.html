@@ -329,16 +329,42 @@
         "Your form looks complete, but it has not been sent or saved. Online submission will be connected in a later step.";
     });
 
-    document.getElementById("report-button").addEventListener("click", function() {
-      const link = document.getElementById("report-link").value.trim();
-      const reason = document.getElementById("report-reason").value.trim();
-      const message = document.getElementById("report-message");
-      if (!link || !reason) {
-        message.textContent = "Please enter the store link and explain your concern.";
-        return;
-      }
-      message.textContent = "Report preview prepared. Nothing has been submitted or published.";
+    document.getElementById("report-button").addEventListener("click", async function() {
+  const link = document.getElementById("report-link").value.trim();
+  const reason = document.getElementById("report-reason").value.trim();
+  const message = document.getElementById("report-message");
+  const supabase = window.supabaseClient;
+
+  if (!link || !reason) {
+    message.textContent = "Please enter the store link and explain your concern.";
+    return;
+  }
+
+  if (!supabase) {
+    message.textContent = "Database is still connecting. Please try again.";
+    return;
+  }
+
+  message.textContent = "Submitting report...";
+
+  const { error } = await supabase
+    .from("suspicious_store_reports")
+    .insert({
+      store_url: link,
+      report_description: reason
     });
+
+  if (error) {
+    console.error("Report submission error:", error.message);
+    message.textContent = "Report could not be submitted. Please try again later.";
+    return;
+  }
+
+  message.textContent =
+    "Test report submitted successfully for review. A report is not proof that a store is fraudulent.";
+  document.getElementById("report-link").value = "";
+  document.getElementById("report-reason").value = "";
+});
   </script>
 
 <script type="module">
