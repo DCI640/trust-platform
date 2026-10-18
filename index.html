@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Verify online sellers, request product inspections, and track deliveries with greater confidence.">
+  <title>Trust Platform | Shop with Confidence</title>
+  <style>
+    :root {
+      --navy: #10243a;
+      --green: #087f5b;
+      --light: #f3f7f6;
+      --text: #263746;
+      --white: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background: var(--white);
+    }
+    header {
+      background: var(--white);
+      padding: 18px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #e5ece9;
+    }
+    .logo { font-size: 22px; font-weight: 800; color: var(--navy); }
+    .logo span { color: var(--green); }
+    nav { display: flex; gap: 18px; flex-wrap: wrap; }
+    nav a { color: var(--navy); text-decoration: none; font-size: 14px; }
+    .hero {
+      padding: 76px 7%;
+      background: linear-gradient(120deg, #edf7f2, #f4f7fb);
+      text-align: center;
+    }
+    .eyebrow {
+      color: var(--green);
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-size: 12px;
+    }
+    h1 {
+      color: var(--navy);
+      font-size: clamp(34px, 5vw, 54px);
+      line-height: 1.12;
+      max-width: 800px;
+      margin: 18px auto;
+    }
+    .hero p { max-width: 650px; margin: 0 auto 26px; }
+    .button {
+      display: inline-block;
+      background: var(--green);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 7px;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 5px;
+    }
+    .button.secondary { background: var(--navy); }
+    section { padding: 54px 7%; }
+    .section-title { text-align: center; margin-bottom: 30px; }
+    h2 { color: var(--navy); font-size: 30px; margin-bottom: 8px; }
+    .section-title p { margin: 0 auto; max-width: 650px; }
+    .search-panel {
+      max-width: 760px;
+      margin: 28px auto 0;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    input, select, textarea {
+      font: inherit;
+      padding: 13px;
+      border: 1px solid #cbd6d2;
+      border-radius: 7px;
+      width: 100%;
+      background: white;
+    }
+    .search-panel input { flex: 1; min-width: 220px; }
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: 0;
+    }
+    .search-panel button {
+      background: var(--navy);
+      color: white;
+      border-radius: 7px;
+      padding: 12px 20px;
+    }
+    .notice {
+      max-width: 760px;
+      margin: 12px auto 0;
+      font-size: 13px;
+      color: #526575;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      border: 1px solid #e0e9e5;
+      padding: 24px;
+      border-radius: 12px;
+      background: white;
+    }
+    .card .symbol { font-size: 28px; }
+    .card h3 { color: var(--navy); margin-bottom: 8px; }
+    .card p { font-size: 14px; }
+    .soft { background: var(--light); }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 22px;
+    }
+    .step-number { color: var(--green); font-size: 25px; font-weight: bold; }
+    .form-wrap { max-width: 680px; margin: auto; }
+    .form-wrap label { display: block; font-weight: bold; margin: 14px 0 6px; }
+    .form-wrap button { margin-top: 18px; }
+    .small-note { font-size: 12px; color: #5b6b78; }
+    footer { background: var(--navy); color: white; padding: 30px 7%; }
+    footer a { color: #c6f6df; }
+    @media (max-width: 600px) {
+      header { padding: 16px 5%; }
+      nav { gap: 12px; }
+      .hero { padding: 55px 5%; }
+      section { padding: 42px 5%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">TRUST<span>PLATFORM</span></div>
+    <nav>
+      <a href="#verify">Verify sellers</a>
+      <a href="#services">Our services</a>
+      <a href="#report">Report a store</a>
+      <a href="#support">Support us</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Shop smarter. Reduce risk.</div>
+      <h1>Shop online with greater confidence.</h1>
+      <p>Check seller information, request independent product inspections, and coordinate deliveries with a service designed to make online shopping safer.</p>
+      <a class="button" href="#verify">Check a seller</a>
+      <a class="button secondary" href="#services">Explore our services</a>
+    </section>
+
+    <section id="verify">
+      <div class="section-title">
+        <h2>Check before you pay</h2>
+        <p>Search using a store name, website address, social media handle, or phone number.</p>
+      </div>
+      <form class="search-panel" id="seller-search">
+        <input id="seller-query" type="search" placeholder="Enter a store name, website or handle" aria-label="Seller search" required>
+        <button type="submit">Search</button>
+      </form>
+      <p class="notice" id="search-message" role="status">Seller search will be connected to our verification database in a later step. No seller has been verified by this demo page.</p>
+    </section>
+
+    <section id="services" class="soft">
+      <div class="section-title">
+        <h2>How we help</h2>
+        <p>Practical support from checking a seller to receiving your purchase.</p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <div class="symbol">🔎</div>
+          <h3>Seller verification</h3>
+          <p>Review available business details, official links, and verification evidence before deciding whether to buy.</p>
+          <a href="#verify">Check a seller</a>
+        </article>
+        <article class="card">
+          <div class="symbol">📦</div>
+          <h3>Product inspection</h3>
+          <p>Request a local agent to inspect an item's visible condition and agreed specifications before purchase.</p>
+          <a href="#request">Request a service</a>
+        </article>
+        <article class="card">
+          <div class="symbol">🚚</div>
+          <h3>Shipping coordination</h3>
+          <p>Coordinate collection and dispatch through existing courier services and follow available tracking updates.</p>
+          <a href="#request">Arrange assistance</a>
+        </article>
+        <article class="card">
+          <div class="symbol">🛡️</div>
+          <h3>Report a suspicious store</h3>
+          <p>Submit information for review. Reports will need evidence and moderation before any public warning is issued.</p>
+          <a href="#report">Submit information</a>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>A clear process</h2>
+        <p>We aim to make every step understandable.</p>
+      </div>
+      <div class="steps">
+        <div><div class="step-number">01</div><h3>Check</h3><p>Search for available seller information and verification status.</p></div>
+        <div><div class="step-number">02</div><h3>Request</h3><p>Explain what you need checked and review the service quote.</p></div>
+        <div><div class="step-number">03</div><h3>Review</h3><p>Receive the agreed inspection findings or service update.</p></div>
+        <div><div class="step-number">04</div><h3>Track</h3><p>Use the courier's tracking reference where available.</p></div>
+      </div>
+    </section>
+
+    <section id="request" class="soft">
+      <div class="section-title">
+        <h2>Request a service</h2>
+        <p>Tell us what assistance you need. This demo form does not yet send or save submissions.</p>
+      </div>
+      <form class="form-wrap" id="service-form">
+        <label for="customer-name">Your name</label>
+        <input id="customer-name" name="name" autocomplete="name" required>
+        <label for="customer-contact">Email or phone</label>
+        <input id="customer-contact" name="contact" required>
+        <label for="service-type">Service required</label>
+        <select id="service-type" name="service" required>
+          <option value="">Choose a service</option>
+          <option>Seller verification</option>
+          <option>Product inspection</option>
+          <option>Purchase assistance</option>
+          <option>Shipping coordination</option>
+        </select>
+        <label for="service-details">Store, item, location and details</label>
+        <textarea id="service-details" name="details" rows="4" required></textarea>
+        <button class="button" type="submit">Prepare request</button>
+        <p class="small-note">Do not submit payment details, passwords, identity documents, or other sensitive information through this demo.</p>
+        <p id="service-message" role="status"></p>
+      </form>
+    </section>
+
+    <section id="report">
+      <div class="section-title">
+        <h2>Help us investigate suspicious stores</h2>
+        <p>Reports must be assessed fairly. A report is not proof of fraud, and businesses should have an opportunity to respond to concerns.</p>
+      </div>
+      <div class="form-wrap">
+        <label for="report-link">Store website or social media link</label>
+        <input id="report-link" placeholder="https://example.com">
+        <label for="report-reason">What concerns you?</label>
+        <textarea id="report-reason" rows="3" placeholder="Describe what happened and what evidence is available."></textarea>
+        <button class="button" id="report-button" type="button">Prepare report</button>
+        <p id="report-message" role="status"></p>
+        <p class="small-note">This demo does not transmit reports. A secure submission and review system must be added before public launch.</p>
+      </div>
+    </section>
+
+    <section id="support" class="soft">
+      <div class="section-title">
+        <h2>Support safer online shopping</h2>
+        <p>Voluntary contributions could help fund seller checks, public awareness, and community reporting tools.</p>
+        <p>Donation collection and transparent financial reporting will be introduced only after suitable arrangements are in place.</p>
+        <a class="button" href="mailto:YOUR-EMAIL@example.com?subject=Supporting%20Trust%20Platform">Ask about supporting us</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>TRUST PLATFORM</strong>
+    <p>Helping people make more informed online shopping decisions.</p>
+    <p><a href="#verify">Check a seller</a> · <a href="#report">Report a concern</a> · <a href="#support">Support our mission</a></p>
+    <p class="small-note">Verification reduces uncertainty but cannot guarantee a seller, product, payment, or delivery is safe.</p>
+    <p class="small-note">© <span id="year"></span> Trust Platform. Replace this placeholder brand and contact information before launch.</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    document.getElementById("seller-search").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const query = document.getElementById("seller-query").value.trim();
+      document.getElementById("search-message").textContent =
+        'Search for "' + query + '" is a preview only. The seller database has not been connected yet.';
+    });
+
+    document.getElementById("service-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+      document.getElementById("service-message").textContent =
+        "Your form looks complete, but it has not been sent or saved. Online submission will be connected in a later step.";
+    });
+
+    document.getElementById("report-button").addEventListener("click", function() {
+      const link = document.getElementById("report-link").value.trim();
+      const reason = document.getElementById("report-reason").value.trim();
+      const message = document.getElementById("report-message");
+      if (!link || !reason) {
+        message.textContent = "Please enter the store link and explain your concern.";
+        return;
+      }
+      message.textContent = "Report preview prepared. Nothing has been submitted or published.";
+    });
+  </script>
+</body>
+</html>
