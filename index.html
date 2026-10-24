@@ -430,42 +430,64 @@ document.getElementById("service-form").addEventListener("submit", async functio
 });
 
 
-    document.getElementById("report-button").addEventListener("click", async function() {
+   
+document.getElementById("report-button").addEventListener("click", async function() {
   const link = document.getElementById("report-link").value.trim();
   const reason = document.getElementById("report-reason").value.trim();
   const message = document.getElementById("report-message");
-  const supabase = window.supabaseClient;
+  const section = document.getElementById("report");
 
   if (!link || !reason) {
     message.textContent = "Please enter the store link and explain your concern.";
     return;
   }
 
-  if (!supabase) {
-    message.textContent = "Database is still connecting. Please try again.";
+  const tokenInput = section.querySelector('input[name="cf-turnstile-response"]');
+  const token = tokenInput ? tokenInput.value : "";
+
+  if (!token) {
+    message.textContent = "Please complete the security verification.";
     return;
   }
 
   message.textContent = "Submitting report...";
 
-  const { error } = await supabase
-    .from("suspicious_store_reports")
-    .insert({
-      store_url: link,
-      report_description: reason
+  try {
+    const response = await fetch("https://trust-platform-forms.dfrecbett.workers.dev", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token,
+        formType: "report",
+        fields: {
+          store_url: link,
+          report_description: reason
+        }
+      })
     });
 
-  if (error) {
-    console.error("Report submission error:", error.message);
-    message.textContent = "Report could not be submitted. Please try again later.";
-    return;
-  }
+    const result = await response.json();
 
-  message.textContent =
-    "Test report submitted successfully for review. A report is not proof that a store is fraudulent.";
-  document.getElementById("report-link").value = "";
-  document.getElementById("report-reason").value = "";
+    if (!response.ok || !result.success) {
+      message.textContent = result.error || "Report could not be submitted. Please try again later.";
+      if (window.turnstile) window.turnstile.reset();
+      return;
+    }
+
+    message.textContent =
+      "Report submitted successfully for review. A report is not proof that a store is fraudulent.";
+    document.getElementById("report-link").value = "";
+    document.getElementById("report-reason").value = "";
+
+    if (window.turnstile) window.turnstile.reset();
+
+  } catch (error) {
+    console.error("Report submission error:", error);
+    message.textContent = "Unable to submit the report. Please check your connection and try again.";
+    if (window.turnstile) window.turnstile.reset();
+  }
 });
+
   </script>
 
 <script type="module">
